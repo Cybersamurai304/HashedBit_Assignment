@@ -1,0 +1,55 @@
+<!-- Part 2
+You are building the game Hot or Cold. In this game, the computer generates a random number and the user guesses the number. If the guess is close to the number, the computer replies with "Hot" and if the guess is far from the generated number, the computer replies with "Cold".
+
+If number generated is negative, show Cold or else Hot in a new div below the number generated
+ --> 
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hot-Cold</title>
+    <style></style>
+    <!-- I will not be putiing any css for this part as there was no css in the previous one ethier. -->
+ </head>
+ <body>
+    <h1>Hot or Cold Game</h1>
+    <p>Guess a number between -20 and 20:</p>
+    <input type="number" id="Guess">
+    <button onclick="checkNum()">Submit Guess</button>
+    <div id="feedback"></div>
+    <div id="numberInfo"></div>
+<script>
+    let num = Math.floor(Math.random()*(20 - (-20))) + (-20);
+    function checkNum(){
+        let guess = parseInt(document.getElementById("Guess").value);
+        
+
+        if(20 < guess || guess < -20){
+            alert("Please enter a valid number");
+            return;
+        }
+
+        let diff = Math.abs(num - guess);
+
+        if(diff === 0){
+            document.getElementById("feedback").textContent = "!!!YOU HAVE GUESSED THE RIGHT NUMBER!!!";
+        }
+        else if(diff <= 2){
+            document.getElementById("feedback").textContent = "HOT!";
+        }
+        else{
+            document.getElementById("feedback").textContent = "Cold!";
+        }
+
+        if(diff < 0){
+            document.getElementById("numberInfo").textContent = `The number generated is negative (${num})`;
+        }
+        else{
+            document.getElementById("numberInfo").textContent = `The number generated is positive (${num})`;
+        }
+    }
+</script>
+ </body>
+ </html>
