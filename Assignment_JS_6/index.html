@@ -1,0 +1,96 @@
+<!-- One of the very important features of javascript is Timing events. There are javaScript functions which after a given time execute a callback function. We will utilize them to make our own stopwatch. Acceptance Criteria
+This stopwatch should show passed hours, minutes and seconds.
+Format of the output Time string should be HH:MM:SS
+Render 3 buttons start, stop, pause.
+Stopwatch should start on click event of start button.
+Initially pause and stop button should be disabled. They should be enabled after stopwatch starts.
+start button should be disabled once the stopwatch starts.
+Initial time should be 00:00:00.
+Pause and stop button have the normal functionality to pause and stop the stopwatch.
+When timer is entering pause state, change text of pause button to continue
+If the stopwatch is continued after a pause, change the text of continue button to pause(like before pause state)
+When stop button is clicked, restart the stopwatch (text 00:00:00, disabled pause, stop buttons and enable start button ).
+Stopwatch should not loose much time(if timer is paused after 0.5 sec then it should not loose that time and continue counting from 0.5 sec).
+Clear the timers
+
+Sample - https://d3dyfaf3iutrxo.cloudfront.net/thumbnail/assignment/question/86eed0097db844f18880f9356a678b04.png
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="time" 00:00:00></div>
+    <button onclick="start()" id="start">start</button>
+    <button onclick="pause()" id="pause">pause</button>
+    <button onclick="stop()" id="stop">stop</button>
+    <script>
+      let timeInterval;
+      let startTime;
+      let elapseTime = 0;
+      let isRunning = false;
+
+      function format(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const min = Math.floor((seconds % 3600) / 60);
+        const remainingSec = seconds % 60;
+
+        return `${String(hours).padStart(2, "0")}:${String(min).padStart(2,"0")}:${String(remainingSec).padStart(2, "0")}`;
+      }
+      function updateDisplay(timeString) {
+        document.getElementById("time").textContent = timeString;
+      }
+
+      function start() {
+        if (!isRunning) {
+          isRunning = true;
+          updateDisplay(format(elapseTime));
+          startTime = Date.now();
+          timeInterval = setInterval(() => {
+            const currentTime = Math.floor(
+              (Date.now() - startTime + elapseTime) / 1000
+            );
+            updateDisplay(format(currentTime));
+          }, 1000);
+          document.getElementById("start").disabled = true;
+          document.getElementById("pause").disabled = false;
+          document.getElementById("stop").disabled = false;
+        }
+      }
+      function pause() {
+        if (isRunning) {
+          clearInterval(timeInterval);
+          elapseTime += Date.now() - startTime;
+          isRunning = false;
+          document.getElementById("pause").textContent = "Continue";
+        } else {
+          isRunning = true;
+          startTime = Date.now();
+          timeInterval = setInterval(() => {
+            const currentTime = Math.floor(
+              (Date.now() - startTime + elapseTime) / 1000
+            );
+            updateDisplay(format(currentTime));
+          }, 1000);
+          document.getElementById("pause").textContent = "Pause";
+        }
+      }
+
+      function stop() {
+        clearInterval(timeInterval);
+        isRunning = false;
+        elapseTime = 0;
+        updateDisplay("00:00:00");
+
+        document.getElementById("start").disabled = false;
+        document.getElementById("pause").disabled = true;
+        document.getElementById("stop").disabled = true;
+      }
+    </script>
+  </body>
+</html>
